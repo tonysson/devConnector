@@ -1,6 +1,0 @@
-{
-    "mongoURI": "mongodb+srv://teyi:aellahsibi@cluster0-jys2j.mongodb.net/network?retryWrites=true",
-    "JWT_SECRET":"myultrasecurekeyforwebtoken-aellahsibiismyonelovegirl",
-    "githubClientId" : "Iv1.751bd407076e89d8",
-    "githubSecret" : "b080fd60664dcea619f73a6fa0a82f7f97bc1566"
-}
