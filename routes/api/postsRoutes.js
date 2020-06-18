@@ -5,7 +5,7 @@ const { check, validationResult } = require('express-validator');
 const User = require('../../models/userModel')
 const Post = require('../../models/postModel');
 const checkObjectId = require('../../middleware/checkObjectId')
-const Profile = require('../../models/profileModel');
+
 
 
 
@@ -17,7 +17,7 @@ const Profile = require('../../models/profileModel');
 router.post('/', 
 [auth ,
  [
-     check('text', 'Text us required').not().isEmpty()
+     check('text', 'Text is required').not().isEmpty()
  ]
 ] , async(req, res) => {
     
@@ -156,6 +156,7 @@ router.put('/like/:id', [auth, checkObjectId('id')], async (req, res) => {
     try {
 
 
+        //send request
         const post = await Post.findById(req.params.id);
 
         // Check if the post has already been liked

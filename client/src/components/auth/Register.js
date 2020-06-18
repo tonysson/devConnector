@@ -1,7 +1,18 @@
 import React, {Fragment, useState} from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
+import { connect } from 'react-redux' // allow us to coonect a component to redux
+import { setAlert } from './../../actions/alert';
+import {register} from './../../actions/auth';
+import PropTypes from 'prop-types';
 
-export const Register = () => {
+/**
+ * Pour utuliser connect() on le passe au niveau du export default
+ *  pour utiliser une action on la passe au connect() 
+ * il nous donne access à props.setAlert par exemple,
+ * Mais ds notre cas on a fait de la desctructuration dc pas besoin de faire props.setAlert
+ */
+
+const Register = ({ setAlert, register, isAuthenticated}) => {
 
     //statemanagement with useState
     const [formData, setState] = useState({
@@ -15,19 +26,23 @@ export const Register = () => {
     const { name, email, password, password2} = formData
 
     // pull out the value of our input
-    const onChange = e => setState({... formData , [e.target.name]: e.target.value});
+    const onChange = e => setState({...formData , [e.target.name]: e.target.value});
 
     // manage the submit
     const onSubmit = async e => {
         e.preventDefault();
 
         if(password !== password2){
-            console.log('Both passwords do not match');
+            setAlert('Both passwords do not match', 'danger');
             
         }else{
-            console.log('SUCCESS');
+           register({name, email, password})
         }
 
+    }
+
+    if(isAuthenticated){
+        return <Redirect to="/dashboard" />
     }
 
     return (
@@ -42,7 +57,7 @@ export const Register = () => {
                      name="name"
                      value={name}
                      onChange={e => onChange(e)}
-                     required />
+                    />
                 </div>
                 <div className="form-group">
                     <input 
@@ -51,7 +66,7 @@ export const Register = () => {
                      name="email" 
                      value={email}
                      onChange={e => onChange(e)}
-                     required
+                   
                      />
                     <small className="form-text"
                     >This site uses Gravatar so if you want a profile image, use a
@@ -64,7 +79,7 @@ export const Register = () => {
                         value={password}
                         onChange={e => onChange(e)}
                         name="password"
-                        minLength="6"
+                       
                     />
                 </div>
                 <div className="form-group">
@@ -74,7 +89,7 @@ export const Register = () => {
                         value={password2}
                         onChange={e => onChange(e)}
                         name="password2"
-                        minLength="6"
+                     
                     />
                 </div>
                 <input type="submit" className="btn btn-primary" value="Register" />
@@ -84,4 +99,18 @@ export const Register = () => {
             </p>
         </Fragment>
     )
+};
+
+Register.propTypes = {
+    setAlert : PropTypes.func.isRequired,
+    register: PropTypes.func.isRequired,
+    isAuthenticated: PropTypes.bool,
 }
+
+const mapStateToProps = (state) => ({
+    isAuthenticated: state.auth.isAuthenticated
+});
+
+
+
+export default connect(mapStateToProps  , {setAlert, register})(Register)

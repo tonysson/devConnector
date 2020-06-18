@@ -8,15 +8,15 @@ const auth = require('../../middleware/authMiddleware');
 const User = require('../../models/userModel');
 
 /**
- * @route GET API/auth
- * @desc  Test Route
- * @access Public
+ * @route    GET api/auth
+*  @desc     Get user by token
+ * @access   Private
  */
 router.get('/', auth,  async (req, res) => {
     try {
         
         const user = await User.findById(req.user.id).select('-password');
-        res.status(200).json(user)
+        res.json(user)
     } catch (error) {
         console.log(error.message);
         res.status(500).send('Server Error')
